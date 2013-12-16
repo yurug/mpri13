@@ -1,0 +1,4 @@
+let main =
+  (fun id ->
+     let x = id 0 in
+     id 'a') (fun x -> x)

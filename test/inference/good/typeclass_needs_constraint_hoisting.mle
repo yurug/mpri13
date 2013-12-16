@@ -1,0 +1,9 @@
+type 'a box = B of 'a
+class H 'a { h : 'a -> int }
+instance ['a] H 'a box { h = fun (x : 'a box) -> 0 }
+let
+['a] (f : 'a box -> int) =
+  ['a]
+  fun (x_1 : 'a box) ->
+    let (z : int) = h['a box] x_1[] in
+      let (y : 'a) = match x_1[] with B['a](y_1) -> y_1[] in z[]

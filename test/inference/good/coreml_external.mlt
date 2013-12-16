@@ -1,0 +1,4 @@
+type external out_channel = "Pervasives.out_channel"
+let external (stdout : out_channel) = "Pervasives.stdout"
+let external (output_char : out_channel -> char -> unit) = "Pervasives.output_char"
+let main = output_char stdout 'a'

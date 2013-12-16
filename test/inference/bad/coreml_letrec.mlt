@@ -1,0 +1,2 @@
+let rec f = fun x -> g x
+and g = fun x -> f 42 ()

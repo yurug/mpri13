@@ -1,0 +1,2 @@
+class H 'a { x : int }
+let ['a] [ H 'a ] (main : int) = ['a] x['a]

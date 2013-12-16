@@ -1,0 +1,2 @@
+class RW 'a { read : unit -> 'a ; write : 'a -> unit }
+let r = write (read ())

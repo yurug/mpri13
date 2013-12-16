@@ -1,0 +1,2 @@
+class H 'a { h : 'a -> int }
+let ['a] [ H 'a ] (x : int) = ['a] 0

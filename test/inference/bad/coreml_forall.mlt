@@ -1,0 +1,3 @@
+let main =
+  let id = ['b] fun (x : 'a) -> x in
+  id 42

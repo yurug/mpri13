@@ -1,0 +1,2 @@
+class R 'a { read : unit -> 'a }
+let r = read ()

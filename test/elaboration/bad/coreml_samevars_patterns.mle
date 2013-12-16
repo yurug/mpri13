@@ -1,0 +1,4 @@
+type p = Pair of int * int
+let
+(main : int) =
+  match Pair[] (0, 0) with (Pair[](0, x)| Pair[](y, 0)) -> x[] | _ -> 1

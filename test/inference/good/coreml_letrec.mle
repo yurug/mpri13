@@ -1,0 +1,4 @@
+let rec
+['a] (f : int -> 'a) = ['a] fun (x : int) -> g['a] x[]
+and
+['a] (g : int -> 'a) = ['a] fun (x_1 : int) -> f['a] 42

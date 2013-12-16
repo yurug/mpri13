@@ -1,0 +1,3 @@
+class H 'a { h : 'a -> int }
+class H 'a { h : 'a -> int }
+let main = 0

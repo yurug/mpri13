@@ -1,0 +1,4 @@
+let
+(main : int) =
+  (fun (id : int -> int) -> let (x : int) = id[] 0 in id[] 'a')
+    (fun (x : int) -> x[])

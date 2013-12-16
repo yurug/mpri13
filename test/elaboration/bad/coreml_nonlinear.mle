@@ -1,0 +1,2 @@
+type 'a p = Pair of 'a * 'a
+let (main : int) = match Pair[int] (0, 0) with Pair[int](x, x) -> x[]

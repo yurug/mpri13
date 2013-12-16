@@ -1,0 +1,4 @@
+let
+(main : char) =
+  let ['a] (id : 'a -> 'a) = ['a] fun (x : 'a) -> x[] in
+    let (x_1 : int) = id[int] 0 in id[char] 'a'

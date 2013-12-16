@@ -1,0 +1,1 @@
+let ['a] (id : 'a -> int) = ['a] fun (x : 'a) -> 42

@@ -1,0 +1,4 @@
+type 'a pair = Pair of 'a * 'a 
+class H 'a { x : 'a }
+class H 'a => I 'a { y : 'a }
+let f = fun z -> Pair (Pair (x, z), Pair (y, z))

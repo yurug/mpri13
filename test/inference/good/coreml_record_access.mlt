@@ -1,0 +1,2 @@
+type t = { x : int }
+let f = fun r -> r.x

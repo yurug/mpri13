@@ -1,0 +1,5 @@
+type ('a, 'b) pair = Pair of 'a * 'b
+let x = Pair (0, 'a')
+let y = Pair ('a', 0)
+let f = fun x -> fun y -> Pair (x, y)
+let z = f 0 ()

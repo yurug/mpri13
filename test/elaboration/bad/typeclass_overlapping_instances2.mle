@@ -1,0 +1,4 @@
+class H 'a { x : 'a }
+type 'a o = O of 'a
+instance ['a] H 'a => H 'a o { x = O['a] (x['a]) }
+instance ['a] H 'a => H 'a o { x = O['a] (x['a]) }

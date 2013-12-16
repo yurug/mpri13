@@ -1,0 +1,1 @@
+let (id : int -> int) = fun (x : int) -> x[]

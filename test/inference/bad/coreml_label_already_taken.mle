@@ -1,0 +1,2 @@
+type t = {x : int}
+type u = {x : int}

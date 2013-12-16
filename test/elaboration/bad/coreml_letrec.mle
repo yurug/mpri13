@@ -1,0 +1,4 @@
+let rec
+(f : int -> int) = fun (x : int) -> g[] x[]
+and
+(g : int -> int) = fun (x : int) -> f[] 42 ()

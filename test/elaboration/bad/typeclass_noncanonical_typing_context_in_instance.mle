@@ -1,0 +1,6 @@
+type 'a o = O of 'a
+class H 'a { x : 'a }
+class H 'a => I 'a { y : 'a }
+instance ['a] H 'a, I 'a => H 'a o { x = O['a] (x['a]) }
+instance H int { x = 42 }
+let (main : int o) = x[int o]

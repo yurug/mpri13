@@ -1,0 +1,8 @@
+type 'a list = Nil | Cons of 'a * 'a list
+class H 'a { h : 'a -> int }
+instance ['a] H 'a => H 'a list { h = fun x -> 0 }
+instance H int { h = fun x -> x }
+let hd = fun l -> match l with Cons (x, _) -> x
+let f = fun l -> let y = hd l in h l
+let g = fun (x : int) -> h x
+let k = fun x -> h x

@@ -1,0 +1,4 @@
+class H 'a { h : 'a -> int }
+instance H int { h = fun x -> x }
+instance H int { h = fun x -> 0 }
+let main = 0

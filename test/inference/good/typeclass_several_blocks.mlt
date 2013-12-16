@@ -1,0 +1,24 @@
+let main = 42
+
+type bool = True | False
+
+class H 'a { iz : 'a -> bool }
+
+instance H int { iz = fun x -> True }
+
+let x = iz 0
+
+type nbool = NTrue | NFalse
+
+let nbool_as_bool = fun x -> match x with
+  | NTrue -> False
+  | NFalse -> True
+
+instance H bool { iz = fun x -> x }
+
+instance H nbool {
+  iz = fun x ->
+    iz (nbool_as_bool x)
+}
+
+let y = iz True

@@ -1,0 +1,7 @@
+type 'a pair = Pair of 'a * 'a
+class H 'a { x : 'a }
+class H 'a => I 'a { y : 'a }
+let
+['a] [ I 'a ] (f : 'a -> ('a pair) pair) =
+  ['a]
+  fun (z : 'a) -> Pair['a pair] (Pair['a] (x['a], z[]), Pair['a] (y['a], z[]))

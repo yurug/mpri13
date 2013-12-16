@@ -1,0 +1,3 @@
+let rec ['a] (id : 'a -> 'a) = fun x -> x
+let rec ['a] (id : 'a -> 'a) = fun x -> x
+let rec ['a] (id : 'a -> 'a) = fun x -> x

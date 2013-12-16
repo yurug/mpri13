@@ -1,0 +1,11 @@
+type 'a list = Nil | Cons of 'a * 'a list
+
+type nat = Zero | Succ of nat
+
+let rec length = fun l ->
+  match l with
+  | 0 -> Zero
+  | Cons (_, xs) -> Succ (length xs)
+
+let n = length (Cons (1, Cons (2, Cons (3, Nil))))
+

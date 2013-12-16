@@ -1,0 +1,8 @@
+type ('a, 'b) pair = Pair of 'a * 'b 
+let id = fun x -> x
+let fst = fun x -> match x with Pair (a, _) -> a
+let snd = fun x -> match x with Pair (a, b) -> b
+let a = fst (Pair (0, 1))
+(* let rec ['a] (id : 'a -> 'a) = fun x -> x  *)
+(* let rec ['a] (f : 'a -> 'a) = fun x -> fst (f (Pair (x, x)))  *)
+(* let main = Pair (f 0, f 'a') *)

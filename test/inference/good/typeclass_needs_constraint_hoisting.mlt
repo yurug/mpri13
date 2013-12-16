@@ -1,0 +1,10 @@
+type 'a box = B of 'a
+
+class H 'a { h : 'a -> int }
+
+instance ['a] H ('a box) { h = fun x -> 0 }
+
+let f = fun x -> 
+  let z = h x in
+  let y = match x with B (y) -> y in
+  z

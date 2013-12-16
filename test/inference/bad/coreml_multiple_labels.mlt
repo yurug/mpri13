@@ -1,0 +1,2 @@
+type 'a t = { x : 'a }
+let (y : int t) = { x = 0; x = 42 }[int]

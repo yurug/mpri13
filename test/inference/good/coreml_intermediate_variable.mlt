@@ -1,0 +1,3 @@
+let external ['a] (read : unit -> 'a) = "fun () -> input_value stdin"
+let external ['a] (write : 'a -> unit) = "fun x -> output_value stdout x"
+let (echo : unit -> unit) = fun (x: unit) -> write (read ())
