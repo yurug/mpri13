@@ -1,0 +1,2 @@
+type 'a r1 = {e1 : 'a}
+type r2 = {e2 : 'a}
