@@ -4,6 +4,6 @@ let
 ['b 'a] (fst : ('a,'b) pair -> 'a) =
   ['b 'a] fun (x_1 : ('a,'b) pair) -> match x_1[] with Pair['a, 'b](a, _) -> a[]
 let
-['a 'b] (snd : ('a,'b) pair -> 'b) =
-  ['a 'b] fun (x_2 : ('a,'b) pair) -> match x_2[] with Pair['a, 'b](a_1, b) -> b[]
+['b 'a] (snd : ('a,'b) pair -> 'b) =
+  ['b 'a] fun (x_2 : ('a,'b) pair) -> match x_2[] with Pair['a, 'b](a_1, b) -> b[]
 let (a_2 : int) = fst[int, int] (Pair[int, int] (0, 1))

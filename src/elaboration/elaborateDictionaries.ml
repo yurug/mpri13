@@ -112,6 +112,7 @@ and check_equal_types pos ty1 ty2 =
     raise (IncompatibleTypes (pos, ty1, ty2))
 
 and type_application pos env x tys =
+  List.iter (check_wf_type env KStar) tys;
   let (ts, (_, ty)) = lookup pos x env in
   try
     substitute (List.combine ts tys) ty

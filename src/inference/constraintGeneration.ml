@@ -513,7 +513,7 @@ and infer_expr tenv e (t : crterm) =
       CLet ([ monoscheme h ], (SName k <? t) pos)
       ^ exists_list bindings
         (fun xs ->
-          exists (fun x -> List.(
+          List.(
             let ls = map extract_label_from_binding bindings in
             let (vs, (rty, ltys)) = fresh_product_of_label pos tenv (hd ls) in
             ex vs (
@@ -521,7 +521,7 @@ and infer_expr tenv e (t : crterm) =
               ^ CConjunction (map (infer_label pos tenv ltys) xs)
             )
           )
-        ))
+        )
 
     (** Accessing the label [label] of [e1] requires [e1]'s type to
         be a record in which [label] is assign a [pre x] type. *)

@@ -145,7 +145,7 @@ module Make (GAST : AST.GenericS) = struct
       if produce_ocaml && rbs = [] then
         !^ "()"
       else
-        braces (record_bindings rbs ^^ instantiation i)
+        braces (record_bindings rbs) ^^ instantiation i
 
     | EMatch (_, s, bs) ->
       group (group (!^ "match" ^/^ expression s ^/^ !^ "with") ^/^ branches bs)

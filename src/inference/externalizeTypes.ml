@@ -100,56 +100,56 @@ let export is_type_scheme =
         else
           "'_", gi, ghistory
       in
-        try
-          Misc.assocp (UnionFind.equivalent v) !h
-        with Not_found -> (
-          incr c;
-          let result = prefix ^ name_from_int !c in
-            desc.name <- Some (TName result);
-            h := (v, result) :: !h;
-            result
-        )
+      try
+        Misc.assocp (UnionFind.equivalent v) !h
+      with Not_found -> (
+        incr c;
+        let result = prefix ^ name_from_int !c in
+        desc.name <- Some (TName result);
+        h := (v, result) :: !h;
+        result
+      )
     in
-      (match desc.name with
-        | Some (TName name) ->
-            if desc.kind <> Constant then
-              try
-                Misc.assocp (UnionFind.equivalent v) !history
-              with Not_found -> (
-                history := (v, name) :: !history;
-                name
-              )
-            else name
-        | _ -> autoname ())
+    (match desc.name with
+      | Some (TName name) ->
+        if desc.kind <> Constant then
+          try
+            Misc.assocp (UnionFind.equivalent v) !history
+          with Not_found -> (
+            history := (v, name) :: !history;
+            name
+          )
+        else name
+      | _ -> autoname ())
   in
 
   (* Term traversal. *)
+  let var_or_sym v =
+    let (TName s) as name =
+      match variable_name v with
+        | Some (TName s) ->
+          let desc = UnionFind.find v in
+          if is_type_scheme && IntRank.compare desc.rank IntRank.none = 0 then
+            try
+              TName (Misc.assocp (UnionFind.equivalent v) !history)
+            with Not_found -> (
+              history := (v, s) :: !history;
+              TName s
+            )
+          else
+            TName s
+        | None -> TName (var_name v)
+    in
+    if s.[0] = '\'' then
+      TyVar (undefined_position, name)
+    else
+      TyApp (undefined_position, name, [])
+  in
 
   let rec export_variable visited v =
 
     let is_visited v =
       Mark.same (UnionFind.find v).mark visiting
-    in
-    let var_or_sym v =
-      let (TName s) as name =
-        match variable_name v with
-          | Some (TName s) ->
-            let desc = UnionFind.find v in
-            if is_type_scheme && IntRank.compare desc.rank IntRank.none = 0 then
-              try
-                TName (Misc.assocp (UnionFind.equivalent v) !history)
-              with Not_found -> (
-                history := (v, s) :: !history;
-                TName s
-              )
-            else
-              TName s
-          | None -> TName (var_name v)
-      in
-      if s.[0] = '\'' then
-        TyVar (undefined_position, name)
-      else
-        TyApp (undefined_position, name, [])
     in
     let desc = UnionFind.find v in
 
@@ -157,60 +157,59 @@ let export is_type_scheme =
       raise Cycle
 
     else match desc.structure with
-        | None -> var_or_sym v
-        | Some t ->
-          desc.mark <- visiting;
-          let t = export_term visited t in
-          desc.mark <- Mark.none;
-          t
+      | None -> var_or_sym v
+      | Some t ->
+        desc.mark <- visiting;
+        let t = export_term visited t in
+        desc.mark <- Mark.none;
+        t
 
   and export_term visited t =
     let rec export = function
       | App (v1, v2) ->
-          let t1 = export_variable visited v1
-          and t2 = export_variable visited v2 in
-          ty_app t1 t2
+        let t1 = export_variable visited v1
+        and t2 = export_variable visited v2 in
+        ty_app t1 t2
 
       | Var v ->
         export_variable visited v
 
       | RowCons _
       | RowUniform _ ->
-        assert false
         (** Because we do not make use of rows in the source language. *)
+        assert false
 
     in export t
   in
   let prefix visited tvs () =
     if is_type_scheme then
-      match !history with
-        | [] ->
-          []
-        | history ->
-          List.fold_left
-            (fun quantifiers v ->
-              let desc = UnionFind.find v in
-              match desc.structure with
-                | Some _ -> quantifiers
-                | _ ->
-                  try
-                    ignore (List.find (UnionFind.equivalent v) !visited);
-                    quantifiers
-                  with Not_found ->
-                    let name =
-                      match variable_name v with
-                        | None -> TName (var_name v)
-                        | Some name -> name
-                    in
-                    if List.exists (UnionFind.equivalent v) tvs then (
-                      visited := v :: !visited;
-                      name :: quantifiers
-                    ) else quantifiers
-            )
-            []
-            (* FIXME: Is history needed anymore? *)
-            (List.rev ((fst (List.split history)) @ tvs))
-    else []
+      List.fold_left
+        (fun quantifiers v ->
+          let desc = UnionFind.find v in
+          match desc.structure with
+            | Some _ ->
+              quantifiers
+            | _ ->
+              try
+                ignore (List.find (UnionFind.equivalent v) !visited);
+                quantifiers
+              with Not_found ->
+                let name =
+                  match var_or_sym v with
+                    | TyVar (_, name) -> name
+                    | _ -> assert false
+                in
+                if IntRank.compare desc.rank IntRank.none = 0 then (
+                  visited := v :: !visited;
+                  name :: quantifiers
+                )
+                else
+                  quantifiers
+        )
+        []
+        tvs
+    else
+      []
   in
   fun tvs v ->
     let visited = ref [] in
