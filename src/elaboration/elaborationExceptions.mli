@@ -103,3 +103,7 @@ exception LabelDoesNotBelong of position * lname * tname * tname
 (** [InvalidRecordInstantiation] is raised when a record constructor
     is applied to an incorrect number of types. *)
 exception InvalidRecordInstantiation of position
+
+(** [OverloadedSymbolCannotBeBound] is raised when an overloaded
+    symbol is introduced by a let. *)
+exception OverloadedSymbolCannotBeBound of Positions.position * name

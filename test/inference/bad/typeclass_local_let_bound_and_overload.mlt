@@ -1,0 +1,5 @@
+let bar = let equal = 1 in fun x y -> True
+type bool = True | False
+class Eq 'a { equal : 'a -> 'a -> bool }
+instance Eq int { equal = fun x y -> True }
+let foo = equal 1 2

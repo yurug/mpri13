@@ -1,0 +1,7 @@
+type bool = True | False
+class Eq 'a { equal : 'a -> 'a -> bool }
+instance Eq int { equal = fun x y -> True }
+let foo = equal 1 2
+let bar = fun x y -> True
+let equal = 1
+

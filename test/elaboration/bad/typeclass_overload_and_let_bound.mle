@@ -1,0 +1,2 @@
+class H 'a { h : 'a -> int }
+let (h : int) = 42

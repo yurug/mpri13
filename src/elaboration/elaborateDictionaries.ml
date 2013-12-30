@@ -31,7 +31,6 @@ and block env = function
     (** Instance definitions are ignored. Student! This is your job! *)
     ([], env)
 
-
 and type_definitions env (TypeDefs (_, tdefs)) =
   let env = List.fold_left env_of_type_definition env tdefs in
   List.fold_left type_definition env tdefs

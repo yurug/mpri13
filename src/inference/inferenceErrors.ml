@@ -11,6 +11,11 @@ let handle_error print_variable p =
     | AlphaRename.UnboundVariable (pos, Name x) ->
       fatal pos (Printf.sprintf "  Identifier `%s' is unbound." x)
 
+    | AlphaRename.OverloadedSymbolCannotBeBound (pos, Name x) ->
+      fatal pos (Printf.sprintf
+                   "  Identifier `%s' cannot be both overloaded and let-bound."
+                   x)
+
     | InferenceExceptions.UnboundTypeVariable (pos, TName x) ->
       fatal pos (Printf.sprintf "  Type variable `%s' is unbound." x)
 

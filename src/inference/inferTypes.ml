@@ -108,9 +108,12 @@ let elaborate : ConstraintSolver.answer -> IAST.program -> XAST.program =
             | TyVar (_, x), ty ->
               (x, ty) :: subst
             | TyApp (_, _, ts), TyApp (_, _, tys) ->
+              (** Type inference generates valid instantiations, so: *)
+              assert (List.(length ts = length tys));
               List.fold_left2 aux subst ts tys
             | _, _ ->
-              assert false (** Type inference generates valid instantiations. *)
+              (** Type inference generates valid instantiations. *)
+              assert false
         in
         let subst = aux [] sty ty in
         List.(map (fun x ->

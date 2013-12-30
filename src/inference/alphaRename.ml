@@ -4,13 +4,23 @@ open Name
 open IAST
 
 exception UnboundVariable of Positions.position * name
+exception OverloadedSymbolCannotBeBound of Positions.position * name
 
 let program p =
+  let exclusive_name = -1 in
   let fresh_name =
     let t = Hashtbl.create 13 in
-    fun (Name n) ->
-      let occ = try Hashtbl.find t n with Not_found -> 0 in
-      let occ = succ occ in
+    fun pos ?(exclusive=false) ((Name n) as x) ->
+      let occ =
+        try
+          let occ = Hashtbl.find t n in
+          if exclusive || occ = exclusive_name then
+            raise (OverloadedSymbolCannotBeBound (pos, x))
+          else
+            succ occ
+        with Not_found ->
+          if exclusive then exclusive_name else 1
+      in
       Hashtbl.replace t n occ;
       if occ = 1 then
         Name n
@@ -22,8 +32,8 @@ let program p =
       List.assoc n s
     with Not_found -> raise (UnboundVariable (pos, n))
   in
-  let fresh_binder n s =
-    let n' = fresh_name n in
+  let fresh_binder pos n s =
+    let n' = fresh_name pos n in
     (n', (n, n') :: s)
   in
   let rec program p =
@@ -41,7 +51,8 @@ let program p =
       (BDefinition d, s)
 
   and class_definition s ct =
-    List.fold_left (fun ms (_, LName x, _) ->
+    List.fold_left (fun ms (pos, LName x, _) ->
+      ignore (fresh_name pos ~exclusive:true (Name x));
       (Name x, Name x) :: ms
     ) s ct.class_members
 
@@ -50,12 +61,11 @@ let program p =
   )
 
   and expression s = function
-    (** Core ML. *)
     | EVar (pos, n, i) ->
       EVar (pos, lookup pos n s, i)
 
     | ELambda (pos, b, e) ->
-      let (b, s) = binding s b in
+      let (b, s) = binding pos s b in
       ELambda (pos, b, expression s e)
 
     | EApp (pos, a, b) ->
@@ -76,18 +86,14 @@ let program p =
     | EExists (pos, ts, e) ->
       EExists (pos, ts, expression s e)
 
-    (** Type annotations. *)
     | ETypeConstraint (pos, e, ty) ->
       ETypeConstraint (pos, expression s e, ty)
 
-    (** Algebraic datatypes. *)
     | EDCon (pos, d, i, es) ->
       EDCon (pos, d, i, List.map (expression s) es)
 
     | EMatch (pos, e, bs) ->
       EMatch (pos, expression s e, List.map (branch s) bs)
-
-    (** Records. *)
 
     | ERecordAccess (pos, e, l) ->
       ERecordAccess (pos, expression s e, l)
@@ -103,7 +109,7 @@ let program p =
 
     | BindRecValue (pos, vs) -> List.(
       let bs = map (fun (ValueDef (_, _, _, b, _)) -> b) vs in
-      let (bs, s) = Misc.list_foldmap binding s bs in
+      let (bs, s) = Misc.list_foldmap (binding pos) s bs in
       let vs =
         map2
           (fun (ValueDef (p, ts, cs, _, e)) b ->
@@ -114,7 +120,7 @@ let program p =
     )
 
     | ExternalValue (pos, ts, b, os) ->
-      let (b, s) = binding s b in
+      let (b, s) = binding pos s b in
       (ExternalValue (pos, ts, b, os), s)
 
   (** Pattern matching clause. *)
@@ -128,23 +134,23 @@ let program p =
   (** A value definition consists of a list of explicit universal
       quantifiers, a pattern, and an expression. *)
   and value_definition s (ValueDef (pos, ts, c, b, e)) =
-    let (b, s) = binding s b in
+    let (b, s) = binding pos s b in
     (ValueDef (pos, ts, c, b, expression s e), s)
 
-  and binding s (x, ty) =
-    let (y, s) = fresh_binder x s in
+  and binding pos s (x, ty) =
+    let (y, s) = fresh_binder pos x s in
     ((y, ty), s)
 
   and pattern s = function
-    | PVar (p, n) ->
-      let (y, s) = fresh_binder n s in
-      (PVar (p, y), s)
+    | PVar (pos, n) ->
+      let (y, s) = fresh_binder pos n s in
+      (PVar (pos, y), s)
 
     | PWildcard pos ->
       (PWildcard pos, s)
 
     | PAlias (pos, n, p) ->
-      let (y, s) = fresh_binder n s in
+      let (y, s) = fresh_binder pos n s in
       let (p, s) = pattern s p in
       (PAlias (pos, y, p), s)
 
