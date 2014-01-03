@@ -4,6 +4,6 @@ let rec
 ['a] (length : 'a list -> nat) =
   ['a]
   fun (l : 'a list) ->
-    match l[] with Nil['a] -> Zero[] | Cons['a](_, xs) -> Succ[] (length['a] xs[])
+    match l[] with Nil['a] -> Zero[]| Cons['a](_, xs) -> Succ[] (length['a] xs[])
 let
 (n : nat) = length[int] (Cons[int] (1, Cons[int] (2, Cons[int] (3, Nil[int]))))

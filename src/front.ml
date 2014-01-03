@@ -25,7 +25,7 @@ let parse : (unit, IAST.program) pass
 )
 
 let parse_explicitly_typed : (unit, XAST.program) pass
-= save_as ".mle" (fun () (Filename f) ->
+= save_as ".mlse" (fun () (Filename f) ->
   let xast = ASTio.XAST.parse_program f in
   (xast, ASTio.XAST.pprint_program xast)
 )

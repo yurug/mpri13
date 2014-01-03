@@ -4,9 +4,8 @@ class H 'a { iz : 'a -> bool }
 instance H int { iz = fun (x : int) -> True[] }
 let (x_1 : bool) = iz[int] 0
 type nbool = NTrue | NFalse
-let
-(nbool_as_bool : nbool -> bool) =
-  fun (x_2 : nbool) -> match x_2[] with NTrue[] -> False[] | NFalse[] -> True[]
+let (nbool_as_bool : nbool -> bool) =
+  fun (x_2 : nbool) -> match x_2[] with NTrue[] -> False[]| NFalse[] -> True[]
 instance H bool { iz = fun (x_4 : bool) -> x_4[] }
 instance H nbool { iz = fun (x_3 : nbool) -> iz[bool] (nbool_as_bool[] x_3[]) }
 let (y : bool) = iz[bool] (True[])

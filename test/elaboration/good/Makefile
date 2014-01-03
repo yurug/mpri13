@@ -43,4 +43,4 @@ $(JOUJOU):
 	@ touch $@
 
 clean:
-	rm -f $(TARGETS) *.cmo *.cmi *.mls *.mlr *.out
+	rm -f $(TARGETS) *.cmo *.cmi *.mls *.mlr *.out *.mlse

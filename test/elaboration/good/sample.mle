@@ -1,5 +1,7 @@
 type 'a list = Nil | Cons of 'a * 'a list
+
 type external boolean = "bool"
+
 let external (btrue : boolean) = "true"
 let external (bfalse : boolean) = "false"
 let external (andb : boolean -> boolean -> boolean) = "fun x y -> x && y"
@@ -7,46 +9,51 @@ let external (orb : boolean -> boolean -> boolean) = "fun x y -> x || y"
 let external (equal_int : int -> int -> boolean) = "fun x y -> x = y"
 let external (equal_char : char -> char -> boolean) = "fun x y -> x = y"
 let external (lt_int : int -> int -> boolean) = "fun x y -> x < y"
+
 class Eq 'a { equal : 'a -> 'a -> boolean }
+
 instance Eq int { equal = equal_int[] }
+
 instance Eq char { equal = equal_char[] }
-instance ['a] Eq 'a => Eq 'a list
-{
-  equal
-  =
-  fun (l1 : 'a list) ->
-    fun (l2 : 'a list) ->
-      match l1[] with
-      Nil['a] -> (match l2[] with Nil['a] -> btrue[] | _ -> bfalse[])
-      | Cons['a](x, xs)
-      ->
-      (match l2[] with
-      Nil['a] -> bfalse[]
-      | Cons['a](y, ys) -> andb[] (equal['a] x[] y[]) (equal['a list] xs[] ys[]))
+
+instance ['a] Eq 'a => Eq 'a list {
+  equal = fun (l1 : 'a list) -> fun (l2 : 'a list) ->
+    match l1 [] with
+      | Nil['a] -> (match l2 [] with Nil['a] -> btrue [] | _ -> bfalse [])
+      | Cons['a] (x, xs) -> (
+        match l2 [] with
+          | Nil['a] ->
+            bfalse[]
+          | Cons['a] (y, ys) ->
+            andb[] (equal['a] x[] y[]) (equal['a list] xs[] ys[])
+      )
 }
-class Eq 'a => Ord 'a { lt : 'a -> 'a -> boolean }
-instance Ord int { lt = lt_int[] }
-instance ['a] Ord 'a => Ord 'a list
-{
-  lt
-  =
-  fun (l1 : 'a list) ->
-    fun (l2 : 'a list) ->
-      match l1[] with
-      Nil['a] -> btrue[]
-      | Cons['a](x, xs)
-      ->
-      (match l2[] with
-      Nil['a] -> bfalse[]
-      | Cons['a](y, ys)
-      ->
-      orb[] (lt['a] x[] y[]) (andb[] (equal['a] x[] y[]) (lt['a list] xs[] ys[])))
+
+class Eq 'a => Ord 'a {
+  lt : 'a -> 'a -> boolean
 }
-let rec
-['a] [ Ord 'a ] (search : 'a -> 'a list -> boolean) =
-  ['a]
-  fun (x : 'a) ->
-    fun (l : 'a list) ->
-      match l[] with
-      Nil['a] -> bfalse[]
-      | Cons['a](y, ys) -> orb[] (equal['a] x[] y[]) (search['a] x[] ys[])
+
+instance Ord int {
+  lt = lt_int[]
+}
+
+instance ['a] Ord 'a => Ord 'a list {
+  lt = fun (l1 : 'a list) -> fun (l2 : 'a list) ->
+   match l1[] with
+     | Nil['a] -> btrue []
+     | Cons['a] (x, xs) -> (
+       match l2[] with
+         | Nil['a] ->
+           bfalse[]
+         | Cons ['a] (y, ys) ->
+           orb[]
+             (lt['a] x[] y[])
+             (andb[] (equal['a] x[] y[]) (lt['a list] xs[] ys[]))
+     )
+}
+
+let rec ['a] [Ord 'a] (search : 'a -> 'a list -> boolean) =
+ ['a] fun (x : 'a) -> fun (l : 'a list) ->
+   match l[] with
+     | Nil['a] -> bfalse[]
+     | Cons['a] (y, ys) -> orb [] (equal ['a] x[] y[]) (search ['a] x[] ys[])

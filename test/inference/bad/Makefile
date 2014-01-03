@@ -22,4 +22,4 @@ $(JOUJOU):
 	fi
 
 clean:
-	rm -f *.ml *.ko *.mle *.mls *.mlr
+	rm -f *.ml *.ko *.mle *.mls *.mlr *.mlse
