@@ -1,7 +1,7 @@
 type 'a list = Nil | Cons of 'a * 'a list
 class H 'a { h : 'a -> int }
-instance ['a] H 'a => H 'a list { h = fun (x : 'a list) -> 0 }
-instance H int { h = fun (x_1 : int) -> x_1[] }
+instance ['a] H 'a => H 'a list { h = (fun (x : 'a list) -> 0) }
+instance H int { h = (fun (x_1 : int) -> x_1[]) }
 let
 ['a] (hd : 'a list -> 'a) =
   ['a] fun (l : 'a list) -> match l[] with Cons['a](x_2, _) -> x_2[]

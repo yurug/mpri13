@@ -1,7 +1,7 @@
 type 'a option = None | Some of 'a
 class H 'a { h : 'a -> int }
-instance H int { h = fun (x : int) -> x[] }
-instance ['a] H 'a => H 'a option { h = fun (x_1 : 'a option) -> 0 }
+instance H int { h = (fun (x : int) -> x[]) }
+instance ['a] H 'a => H 'a option { h = (fun (x_1 : 'a option) -> 0) }
 let ['a 'a] [ H 'a ] (do_hash : 'a -> int) = ['a 'a] fun (x_2 : 'a) -> 0
 let
 ['a 'b 'b 'a] [ H 'a, H 'b ] (do_hash2 : 'a -> 'b -> int) =

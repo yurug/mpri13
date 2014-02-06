@@ -1,5 +1,5 @@
 class H 'a { h : 'a -> int }
-instance H int { h = fun (x : int) -> x[] }
-instance H unit { h = fun (x_1 : unit) -> 0 }
+instance H int { h = (fun (x : int) -> x[]) }
+instance H unit { h = (fun (x_1 : unit) -> 0) }
 let ['a] [ H 'a ] (use_h : 'a -> int) = ['a] fun (x_2 : 'a) -> h['a] x_2[]
 let (main : int) = h[int] 0

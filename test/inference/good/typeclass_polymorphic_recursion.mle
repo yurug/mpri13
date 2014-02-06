@@ -1,8 +1,8 @@
 type 'a pair = Pair of 'a * 'a
 class H 'a { h : 'a -> int }
-instance ['a] H 'a => H 'a pair { h = fun (x : 'a pair) -> 0 }
-instance H int { h = fun (x_1 : int) -> x_1[] }
-instance H char { h = fun (x_2 : char) -> 1 }
+instance ['a] H 'a => H 'a pair { h = (fun (x : 'a pair) -> 0) }
+instance H int { h = (fun (x_1 : int) -> x_1[]) }
+instance H char { h = (fun (x_2 : char) -> 1) }
 let
 ['a] (fst : 'a pair -> 'a) =
   ['a] fun (x_3 : 'a pair) -> match x_3[] with Pair['a](a, _) -> a[]

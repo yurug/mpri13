@@ -1,9 +1,9 @@
 type 'a list = Nil | Cons of 'a * 'a list
 class Hashable 'a { hash : 'a -> int }
 class Comparable 'a { cmp : 'a -> 'a -> int }
-instance Hashable int { hash = fun (x : int) -> x[] }
+instance Hashable int { hash = (fun (x : int) -> x[]) }
 instance ['a] Comparable 'a => Comparable 'a list
 {
-  cmp = fun (x_1 : 'a list) -> fun (y : 'a list) -> 0
+  cmp = (fun (x_1 : 'a list) -> fun (y : 'a list) -> 0)
 }
 let (main : int) = 0

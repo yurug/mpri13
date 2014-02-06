@@ -1,6 +1,6 @@
 type 'a box = B of 'a
 class H 'a { h : 'a -> int }
-instance ['a] H 'a box { h = fun (x : 'a box) -> 0 }
+instance ['a] H 'a box { h = (fun (x : 'a box) -> 0) }
 let
 ['a] (f : 'a box -> int) =
   ['a]

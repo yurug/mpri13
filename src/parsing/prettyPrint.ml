@@ -193,7 +193,7 @@ module Make (GAST : AST.GenericS) = struct
     separate_map (!^ ";" ^^ break 1) record_binding rbs
 
   and record_binding (RecordBinding (LName l, e)) =
-    group (!^ l ^/^ !^ "="  ^/^ expression e)
+    group (!^ l ^/^ !^ "="  ^/^ expression' `RecordField e)
 
   and branches bs =
     group (separate_map (break 1 ^^ group (!^ "|" ^^ break 1)) branch bs)
@@ -302,6 +302,7 @@ module Make (GAST : AST.GenericS) = struct
 
   and expression' ctx e =
     parens_if (match ctx, e with
+      | `RecordField, (ELambda _ | EBinding _ | EMatch _)
       | `LApp, (ELambda _ | EDCon _ | EMatch _)
       | `RApp, (ELambda _ | EApp _ | EDCon _ | EMatch _) -> true
       | `InBranchBody, EMatch _ -> true

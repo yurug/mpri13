@@ -1,0 +1,2 @@
+type r = {f : int -> int; g : int}
+let (v : r) = { f = fun (x : int) -> 42; g = 42 }[]
