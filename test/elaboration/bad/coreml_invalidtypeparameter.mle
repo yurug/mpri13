@@ -1,0 +1,6 @@
+type 'a t = Nil
+
+let  (x: unit) =
+  let ['c] (y: 'c -> unit) = ['c] fun (v0: 'c) -> () in
+  let (z: 'c t) = Nil ['c] in (* 'c should not be accessible *)
+  ()
