@@ -32,10 +32,8 @@
 %token CLASS INSTANCE EXTERNAL
 
 %right RARROW branches_prec
-%nonassoc IN RBRACKET RBRACE
 %right PIPE
 %nonassoc AS
-%left DOT
 %nonassoc LID
 %nonassoc tapp
 %nonassoc RPAREN
@@ -290,10 +288,6 @@ expression:
   let (i, fs) = r in
   ERecordCon (pos, fresh_record_name (), i, fs)
 }
-| e=expression DOT l=lname
-{
-  ERecordAccess (lex_join $startpos $endpos, e, l)
-}
 | LBRACE ts=tvname+ RBRACE e=expression
 {
   EExists (lex_join $startpos $endpos, ts, e)
@@ -471,6 +465,10 @@ expression2: x=name
 {
   EPrimitive (lex_join $startpos $endpos, PCharConstant x)
 }
+| e=expression2 DOT l=lname
+{
+  ERecordAccess (lex_join $startpos $endpos, e, l)
+}
 | LPAREN e=expression RPAREN
 {
   e
@@ -515,6 +513,11 @@ x=name
          instantiation $startpos (TypeApplication tys),
          [])
 }
+| e=expression2 DOT l=lname
+{
+  ERecordAccess (lex_join $startpos $endpos, e, l)
+}
+
 
 record_binding: l=lname EQUAL e=expression
 {
