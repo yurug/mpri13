@@ -53,3 +53,7 @@ val redundant: 'a point -> bool
 
 (** [change p d] updates the descriptor of [p] to [d]. *)
 val change: 'a point -> 'a -> 'a
+
+val id : 'a point -> int
+
+val repr : 'a point -> 'a point

@@ -2,6 +2,6 @@ type ('a, 'b) pair = Pair of 'a * 'b
 let (x : (int,char) pair) = Pair[int, char] (0, 'a')
 let (y : (char,int) pair) = Pair[char, int] ('a', 0)
 let
-['b 'a] (f : 'a -> 'b -> ('a,'b) pair) =
-  ['b 'a] fun (x_1 : 'a) -> fun (y_1 : 'b) -> Pair['a, 'b] (x_1[], y_1[])
+['d 'c] (f : 'c -> 'd -> ('c,'d) pair) =
+  ['d 'c] fun (x_1 : 'c) -> fun (y_1 : 'd) -> Pair['c, 'd] (x_1[], y_1[])
 let (z : (int,unit) pair) = f[unit, int] 0 ()

@@ -4,13 +4,13 @@ instance ['a] H 'a => H 'a pair { h = (fun (x : 'a pair) -> 0) }
 instance H int { h = (fun (x_1 : int) -> x_1[]) }
 instance H char { h = (fun (x_2 : char) -> 1) }
 let
-['a] (fst : 'a pair -> 'a) =
-  ['a] fun (x_3 : 'a pair) -> match x_3[] with Pair['a](a, _) -> a[]
+['b] (fst : 'b pair -> 'b) =
+  ['b] fun (x_3 : 'b pair) -> match x_3[] with Pair['b](a, _) -> a[]
 let rec
 ['a] [ H 'a ] (f : 'a -> int) = ['a] fun (x_4 : 'a) -> g['a] x_4[]
 and
-['a] [ H 'a ] (g : 'a -> int) =
-  ['a]
-  fun (x_5 : 'a) ->
-    fst[int] (Pair[int] (f['a pair] (Pair['a] (x_5[], x_5[])), h['a] x_5[]))
+['c] [ H 'c ] (g : 'c -> int) =
+  ['c]
+  fun (x_5 : 'c) ->
+    fst[int] (Pair[int] (f['c pair] (Pair['c] (x_5[], x_5[])), h['c] x_5[]))
 let (main : int pair) = Pair[int] (f[int] 0, f[char] 'a')

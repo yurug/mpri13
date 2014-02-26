@@ -128,7 +128,7 @@ let elaborate : ConstraintSolver.answer -> IAST.program -> XAST.program =
           try
             type_of_variable p (ConstraintSolver.lookup_instantiation e (x, p))
           with Not_found ->
-            Printf.eprintf "%s\n" x;
+            Printf.eprintf "ICE: Cannot find an instantiation for %s\n" x;
             exit 1
         in
         instantiation s instantiation_target

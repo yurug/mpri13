@@ -1,4 +1,4 @@
-(** A generci pretty printer. *)
+(** A generic pretty printer. *)
 
 module Make :
   functor (GAST : AST.GenericS) ->

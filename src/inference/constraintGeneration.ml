@@ -409,26 +409,16 @@ and infer_expr tenv e (t : crterm) =
       let tenv = add_type_variables denv tenv in
       ex fqs (infer_expr tenv e t)
 
-    (** [forall a. e] generates the constraint:
-        let forall b [ (( e : b )) ].(_z : b) in _z < t
-        which means the [e] must have a type at least as general as
-        [t] assuming [a] is generic. *)
     | EForall (pos, vs, e) ->
-      let (rqs, denv) = fresh_rigid_vars pos tenv vs in
-      let tenv = add_type_variables denv tenv in
-      let beta = variable Flexible () in
-      let gt = TVariable beta in
-      CLet ([Scheme (pos, rqs, [beta], [],
-                     infer_expr tenv e gt,
-                     StringMap.singleton "_z" (gt, pos)) ],
-            (SName "_z" <? t) pos)
+      (** Not in the implicitly typed language. *)
+      assert false
 
     (** The type of a variable must be at least as general as [t]. *)
     | EVar (pos, Name name, _) ->
       (SName name <? t) pos
 
     (** To type a lambda abstraction, [t] must be an arrow type.
-        Furthermore, type variables introduce by the lambda pattern
+        Furthermore, type variables introduced by the lambda pattern
         cannot be generalized locally. *)
     | ELambda (pos, b, e) ->
       exists (fun x1 ->

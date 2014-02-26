@@ -1,3 +1,3 @@
 class H 'a { h : 'a -> int }
 class H 'a => J 'a { i : 'a -> unit }
-let ['a 'a] [ H 'a ] (f : 'a -> int) = ['a 'a] fun (x : 'a) -> h['a] x[]
+let ['a] [ H 'a ] (f : 'a -> int) = ['a] fun (x : 'a) -> h['a] x[]

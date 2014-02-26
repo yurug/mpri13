@@ -39,6 +39,9 @@ open MultiEquation
 type variable = MultiEquation.variable
 
 (** [name_from_int i] turns the integer [i] into a type variable name. *)
+let seen_username = Hashtbl.create 13
+let used_name s = Hashtbl.mem seen_username s
+let remember s = Hashtbl.add seen_username s ()
 let rec name_from_int i =
   if i < 26 then
     String.make 1 (Char.chr (0x61 + i))
@@ -84,61 +87,91 @@ let export is_type_scheme =
   let i = ref (-1)
   and history = ref [] in
 
+  (** [bind v s h] assigns [s] to [v] in [h].
+      - [s] must not be already used in [h].
+      - we maintain the invariant that there is at most one binding
+        for each variable [v]. *)
+  let bind v s h =
+    if not (List.exists (fun (v', _) -> UnionFind.equivalent v v') !h) then (
+      assert (not (List.exists (fun (_, s') -> s = s') !h));
+      let desc = UnionFind.find v in
+      desc.name <- Some (TName s);
+      h := (v, s) :: !h
+    )
+  in
+
+  (** [assign_name v s h or_else] assigns name [s] to [v] if it is not
+      already assigned to another variable in [h]. Otherwise, [or_else ()]
+      is evaluated. *)
+  let assign_name v s h or_else =
+    if List.exists (fun (_, s') -> s = s') !h then
+      or_else v
+    else (
+      remember s;
+      bind v s h;
+      s
+    )
+  in
+
   (** [name v] looks up or assigns a name to the variable [v]. When
       dealing with a type scheme, then the local or global namespace
       is used, depending on whether [v] is universally quantified or
       not. When dealing with a type, only the global namespace is
       used. *)
 
-  let rec var_name v =
+  let autoname v =
     let desc = UnionFind.find v in
-    let autoname () =
-      let prefix, c, h =
-        if is_type_scheme && IntRank.compare desc.rank IntRank.none = 0
-        then
-          "'", i, history
-        else
-          "'_", gi, ghistory
-      in
-      try
-        Misc.assocp (UnionFind.equivalent v) !h
-      with Not_found -> (
+    let prefix, c, h =
+      if is_type_scheme && IntRank.compare desc.rank IntRank.none = 0
+      then
+        "'", i, history
+      else
+        "'_", gi, ghistory
+    in
+    try
+      Misc.assocp (UnionFind.equivalent v) !h
+    with Not_found -> (
+      let rec assign_fresh v =
         incr c;
         let result = prefix ^ name_from_int !c in
-        desc.name <- Some (TName result);
-        h := (v, result) :: !h;
-        result
-      )
-    in
-    (match desc.name with
+        if used_name result then
+          assign_fresh v
+        else
+          assign_name v result h assign_fresh
+      in
+      assign_fresh v
+    )
+
+  in
+  let var_name v =
+    let desc = UnionFind.find v in
+    match desc.name with
       | Some (TName name) ->
         if desc.kind <> Constant then
           try
             Misc.assocp (UnionFind.equivalent v) !history
-          with Not_found -> (
-            history := (v, name) :: !history;
-            name
-          )
-        else name
-      | _ -> autoname ())
+          with Not_found ->
+            assign_name v name history autoname
+        else
+          name
+      | _ -> autoname v
   in
 
-  (* Term traversal. *)
   let var_or_sym v =
+    let v = UnionFind.repr v in
     let (TName s) as name =
       match variable_name v with
         | Some (TName s) ->
           let desc = UnionFind.find v in
+          assert (desc.structure = None);
           if is_type_scheme && IntRank.compare desc.rank IntRank.none = 0 then
             try
               TName (Misc.assocp (UnionFind.equivalent v) !history)
-            with Not_found -> (
-              history := (v, s) :: !history;
-              TName s
-            )
+            with Not_found -> TName (assign_name v s history autoname)
           else
             TName s
-        | None -> TName (var_name v)
+        | None ->
+          TName (var_name v)
     in
     if s.[0] = '\'' then
       TyVar (undefined_position, name)

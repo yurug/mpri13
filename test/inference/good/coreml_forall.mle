@@ -1,2 +1,2 @@
 let
-(main : int) = let ['a] (id : 'a -> 'a) = ['a] fun (x : 'a) -> x[] in id[int] 42
+(main : int) = let ['b] (id : 'b -> 'b) = ['b] fun (x : 'b) -> x[] in id[int] 42

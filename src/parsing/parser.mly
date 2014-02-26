@@ -294,7 +294,10 @@ expression:
 }
 | LBRACKET ts=tvname+ RBRACKET e=expression
 {
-  EForall (lex_join $startpos $endpos, ts, e)
+  if GAST.implicit then
+    Errors.fatal [$startpos; $endpos] "Syntax error"
+  else
+    EForall (lex_join $startpos $endpos, ts, e)
 }
 | k=UID
 {

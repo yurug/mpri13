@@ -3,10 +3,10 @@ class H 'a { h : 'a -> int }
 instance ['a] H 'a => H 'a list { h = (fun (x : 'a list) -> 0) }
 instance H int { h = (fun (x_1 : int) -> x_1[]) }
 let
-['a] (hd : 'a list -> 'a) =
-  ['a] fun (l : 'a list) -> match l[] with Cons['a](x_2, _) -> x_2[]
+['c] (hd : 'c list -> 'c) =
+  ['c] fun (l : 'c list) -> match l[] with Cons['c](x_2, _) -> x_2[]
 let
-['a] [ H 'a ] (f : 'a list -> int) =
-  ['a] fun (l_1 : 'a list) -> let (y : 'a) = hd['a] l_1[] in h['a list] l_1[]
+['d] [ H 'd ] (f : 'd list -> int) =
+  ['d] fun (l_1 : 'd list) -> let (y : 'd) = hd['d] l_1[] in h['d list] l_1[]
 let (g : int -> int) = fun (x_3 : int) -> h[int] x_3[]
-let ['a] [ H 'a ] (k : 'a -> int) = ['a] fun (x_4 : 'a) -> h['a] x_4[]
+let ['e] [ H 'e ] (k : 'e -> int) = ['e] fun (x_4 : 'e) -> h['e] x_4[]

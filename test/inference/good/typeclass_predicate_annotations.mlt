@@ -5,10 +5,8 @@ instance H int { h = fun x -> x }
 
 instance ['a] H 'a => H (('a) option) { h = fun x -> 0 }
 
-let ['a] [H 'a] do_hash = 
-  ['a] fun (x : 'a) -> 0
+let ['a] [H 'a] (do_hash : 'a -> int) = fun x -> 0
 
 let 
 ['a 'b] [H 'a, H 'b] 
-do_hash2 = 
-  ['a 'b] fun (x : 'a) -> fun (y : 'b) -> 0
+(do_hash2 : 'a -> 'b -> int) = fun x -> fun y -> 0

@@ -40,7 +40,8 @@
     Information about a class consists of an integer weight (the number
     of elements in the class) and of the class's descriptor. *)
 type 'a point = {
-    mutable link: 'a link
+    mutable link: 'a link;
+    id : int;
   }
 
 and 'a link =
@@ -54,9 +55,14 @@ and 'a info = {
 
 (** [fresh desc] creates a fresh point and returns it. It forms an
     equivalence class of its own, whose descriptor is [desc]. *)
-let fresh desc = {
-  link = Info { weight = 1; descriptor = desc }
+let c = ref 0
+let fresh =
+  fun desc -> incr c; {
+  link = Info { weight = 1; descriptor = desc };
+  id = !c
 }
+
+let id v = match v.link with Link _ -> v.id | Info _ -> -v.id
 
 (** [repr point] returns the representative element of [point]'s
     equivalence class. It is found by starting at [point] and following

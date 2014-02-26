@@ -48,8 +48,10 @@ module Make (P : Types.TypingSyntax) = struct
     | EBinding of position * value_binding * expression
     | EPrimitive of position * primitive
 
-    (** Type annotations. *)
+    (** Type abstraction. *)
     | EForall of position * tname list * expression
+
+    (** Type annotations. *)
     | EExists of position * tname list * expression
     | ETypeConstraint of position * expression * mltype
 
@@ -115,6 +117,7 @@ module Generic = Make (struct
   let instantiation _ _ = assert false
   let destruct_instantiation_as_type_applications _ = assert false
   let destruct_instantiation_as_type_constraint _ = assert false
+  let implicit = false
 end)
 
 module type GenericS = module type of Generic

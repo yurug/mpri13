@@ -1,9 +1,9 @@
 type ('a, 'b) pair = Pair of 'a * 'b
-let ['a] (id : 'a -> 'a) = ['a] fun (x : 'a) -> x[]
+let ['c] (id : 'c -> 'c) = ['c] fun (x : 'c) -> x[]
 let
-['b 'a] (fst : ('a,'b) pair -> 'a) =
-  ['b 'a] fun (x_1 : ('a,'b) pair) -> match x_1[] with Pair['a, 'b](a, _) -> a[]
+['e 'd] (fst : ('d,'e) pair -> 'd) =
+  ['e 'd] fun (x_1 : ('d,'e) pair) -> match x_1[] with Pair['d, 'e](a, _) -> a[]
 let
-['b 'a] (snd : ('a,'b) pair -> 'b) =
-  ['b 'a] fun (x_2 : ('a,'b) pair) -> match x_2[] with Pair['a, 'b](a_1, b) -> b[]
+['g 'f] (snd : ('f,'g) pair -> 'g) =
+  ['g 'f] fun (x_2 : ('f,'g) pair) -> match x_2[] with Pair['f, 'g](a_1, b) -> b[]
 let (a_2 : int) = fst[int, int] (Pair[int, int] (0, 1))

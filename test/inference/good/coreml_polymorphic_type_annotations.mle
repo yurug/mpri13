@@ -1,0 +1,2 @@
+type 'a t = {x : 'a}
+let ['c 'b 'a] (f : 'a t -> 'a) = ['c 'b 'a] fun (r : 'a t) -> r[] .x
