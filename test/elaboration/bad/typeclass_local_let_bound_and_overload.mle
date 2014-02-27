@@ -1,3 +1,2 @@
-let (x : int) = let (h : int) = 42 in h
+let (x : int) = let (h : int) = 42 in h[]
 class H 'a { h : 'a -> int }
-

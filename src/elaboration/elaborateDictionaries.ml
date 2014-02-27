@@ -212,6 +212,13 @@ and expression env = function
     let rbstys = List.map (record_binding env) rbs in
     let rec check others rty = function
       | [] ->
+        begin match rty with
+          | Some (_, TyApp (_, rtcon, _)) ->
+            let labels = labels_of rtcon env in
+            if (List.length labels <> List.length others) then
+              raise (InvalidRecordConstruction pos)
+          | _ -> assert false (** Because we forbid empty record. *)
+        end;
         List.rev others, rty
       | (RecordBinding (l, e), ty) :: ls ->
         if List.exists (fun (RecordBinding (l', _)) -> l = l') others then

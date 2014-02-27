@@ -64,6 +64,10 @@ let is_superclass pos k1 k2 env =
 let bind_type_variable t env =
   bind_type t KStar (TypeDef (undefined_position, KStar, t, DAlgebraic [])) env
 
+let labels_of rtcon env =
+  let p (_, (_, _, rtcon')) = rtcon = rtcon' in
+  List.(fst (split (filter p env.labels)))
+
 let lookup_label pos l env =
   try
     List.assoc l env.labels

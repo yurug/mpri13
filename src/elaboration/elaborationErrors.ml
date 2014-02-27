@@ -114,6 +114,9 @@ let handle_error f =
     | InvalidRecordInstantiation pos ->
       fatal' pos "  Invalid record instantiation."
 
+    | InvalidRecordConstruction pos ->
+      fatal' pos "  Invalid record construction (not the right set of fields)."
+
     | MultipleLabels (pos, LName l) ->
       fatal' pos (Printf.sprintf "  Multiple definitions of label `%s'." l)
 

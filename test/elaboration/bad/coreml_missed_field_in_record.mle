@@ -1,0 +1,2 @@
+type t = { a : int ; b : int }
+let (x : t) = { a = 2 }[]
