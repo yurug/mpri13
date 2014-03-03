@@ -1,0 +1,3 @@
+let external (print_newline : unit -> unit) = "Pervasives.print_newline"
+type t = { x : int }
+let (f : t -> int) = let void = print_newline () in fun r -> r.x

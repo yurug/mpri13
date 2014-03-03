@@ -298,5 +298,7 @@ let type_scheme_of_variable =
       let (ts, ty) = export vs v in
       let cps = List.map (export_class_predicate pos) cps in
       let cps = canonicalize_class_predicates ts cps in
+      let fvs = InternalizeTypes.variables_of_typ ty in
+      let ts = List.filter (fun (TName x) -> StringSet.mem x fvs) ts in
       TyScheme (ts, cps, ty)
     with Cycle -> raise (RecursiveType pos)

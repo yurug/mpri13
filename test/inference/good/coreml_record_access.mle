@@ -1,2 +1,2 @@
 type t = {x : int}
-let ['b 'a] (f : t -> int) = ['b 'a] fun (r : t) -> r[] .x
+let (f : t -> int) = fun (r : t) -> r[] .x

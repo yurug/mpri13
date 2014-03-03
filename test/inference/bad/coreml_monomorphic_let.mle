@@ -1,0 +1,3 @@
+let ['a] (id : 'a -> 'a) = ['a] fun (x : 'a) -> x[]
+let ['b] (id2 : 'b -> 'b) = ['b] id['b -> 'b] id['b]
+let (main : int) = id2[int] 0
