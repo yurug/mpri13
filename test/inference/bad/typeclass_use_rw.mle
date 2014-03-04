@@ -1,2 +1,2 @@
 class RW 'a { read : unit -> 'a; write : 'a -> unit }
-let [ RW 'a ] (r : unit) = write['a] (read['a] ())
+let (r : unit) = write['_a] (read['_a] ())

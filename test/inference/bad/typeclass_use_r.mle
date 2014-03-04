@@ -1,2 +1,2 @@
 class R 'a { read : unit -> 'a }
-let ['a] [ R 'a ] (r : 'a) = ['a] read['a] ()
+let (r : 'a) = read['a] ()

@@ -1,2 +1,2 @@
 let ['a] (id : 'a -> 'a) = ['a] fun (x : 'a) -> x[]
-let ['b] (e : 'b -> 'b) = ['b] id['b -> 'b] id['b]
+let (e : 'b -> 'b) = id['b -> 'b] id['b]

@@ -1,5 +1,5 @@
 class H 'a { h : 'a -> int }
 instance H int { h = fun (x : int) -> x }
 instance H unit { h = fun (x : unit) -> 0 }
-let use_h = fun x -> h x
+let use_h = fun x -> h x 
 let main = h 0
